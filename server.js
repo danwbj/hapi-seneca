@@ -23,8 +23,7 @@ seneca.add('role:user,cmd:find_user', (msg, reply) => {
 })
 seneca.add('role:user,cmd:find_all_user', (msg, reply) => {
     var entity = seneca.make$('usertable')
-    entity.list$({ name: 'danw' ,sort$:{limit:2}}, function (err, entity) {
-        console.log('err: ', err);
+    entity.list$({ name: 'danw' ,limit$:2}, function (err, entity) {
         reply(null, entity)
     })
 })
