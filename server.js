@@ -11,7 +11,7 @@ server.connection({ port: 3000, host: 'localhost' });
 //     host: 'localhost',
 //     port: 5432
 // })
-seneca.use( './micro-services/index.js')
+seneca.use('./micro-services/index.js')
 //CRUD微服务
 // seneca.add('role:user,cmd:find_user', (msg, reply) => {
 //     let id = msg.id
@@ -54,30 +54,30 @@ seneca.use( './micro-services/index.js')
 
 //
 createUser = function (reply) {
-    // seneca.act('role:sql,hook:generate_id', { left: 1, right: 2 }, (err, result) => {
-    //     
-    // })
-    seneca.act('role:user,cmd:create_user,hook:generate_id', function (err, result) {
-        if (err) return
-        reply('Hello, user!' + result.data)
+    seneca.act('role:user,cmd:create_user', function (err, result) {
+        if (err) return reply({result:err})
+        reply(result)
     })
 
 }
 
-findUserById = (request,reply) => {
+findUserById = (request, reply) => {
     seneca.act('role:user,cmd:find_user', { id: request.query.id }, (err, result) => {
         if (err) return
         reply(result)
     })
 }
-findAllUserById = (request,reply) => {
-    seneca.act('role:user,cmd:find_all_user', (err, result) => {
-        if (err) return
+findAllUserById = (request, reply) => {
+    seneca.act('role:sql,hook:generate_id', { left: 1, right: 2 }, (err, result) => {
         reply(result)
     })
+    // seneca.act('role:user,cmd:find_all_user', (err, result) => {
+    //     if (err) return
+    //     reply(result)
+    // })
 }
 editUser = (request, reply) => {
-    seneca.act('role:user,cmd:edit_user', {id:request.query.id,name:request.query.name}, (err, result) => {
+    seneca.act('role:user,cmd:edit_user', { id: request.query.id, name: request.query.name }, (err, result) => {
         if (err) return
         reply(result)
     })
@@ -85,54 +85,54 @@ editUser = (request, reply) => {
 deleteUser = (request, reply) => {
     seneca.act('role:user,cmd:delete_user', { id: request.query.id }, (err, result) => {
         if (err) return
-        reply({result:'success'})
+        reply({ result: 'success' })
     })
 }
 
 //路由
 server.route([
-{
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-        reply('Hello, world!');
-    }
-},
-{
-    method: 'GET',
-    path: '/user/create',
-    handler: function (request, reply) {
-        createUser(reply)
-    }
-},
-{
-    method: 'GET',
-    path: '/user/info',
-    handler: function (request, reply) {
-        findUserById(request,reply)
-    }
-},
-{
-    method: 'GET',
-    path: '/user/list',
-    handler: function (request, reply) {
-        findAllUserById(request,reply)
-    }
-},
-{
-    method: 'GET',
-    path: '/user/edit',
-    handler: function (request, reply) {
-        editUser(request,reply)
-    }
-},
-{
-    method: 'GET',
-    path: '/user/delete',
-    handler: function (request, reply) {
-        deleteUser(request,reply)
-    }
-},
+    {
+        method: 'GET',
+        path: '/',
+        handler: function (request, reply) {
+            reply('Hello, world!');
+        }
+    },
+    {
+        method: 'GET',
+        path: '/user/create',
+        handler: function (request, reply) {
+            createUser(reply)
+        }
+    },
+    {
+        method: 'GET',
+        path: '/user/info',
+        handler: function (request, reply) {
+            findUserById(request, reply)
+        }
+    },
+    {
+        method: 'GET',
+        path: '/user/list',
+        handler: function (request, reply) {
+            findAllUserById(request, reply)
+        }
+    },
+    {
+        method: 'GET',
+        path: '/user/edit',
+        handler: function (request, reply) {
+            editUser(request, reply)
+        }
+    },
+    {
+        method: 'GET',
+        path: '/user/delete',
+        handler: function (request, reply) {
+            deleteUser(request, reply)
+        }
+    },
 
 ]);
 

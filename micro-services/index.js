@@ -35,17 +35,19 @@ module.exports = function (options) {
             done(err, entity)
         })
     })
-    this.add({ role: 'sql', hook: 'generate_id' }, function (args, done) {
-        return done(err, { id: 'idPrefix' })
-    })
-    this.add({ role: 'user', cmd: 'create_user', hook: 'generate_id' }, function (args, done) {
+    this.add({ role: 'user', cmd: 'create_user' }, function (args, done) {
         var entity = seneca.make$('usertable')
         entity.name = "danw"
         entity.age = 100
         // entity.id='abc'
+        entity.id$ = 'adb'
+        // done(args, entity)
         entity.save$(function (err, entity) {
-            reply(err, { data: entity })
+            done(err, { data: entity })
         })
+    })
+    this.add({ role: 'sql', hook: 'generate_id' }, function (args, done) {
+        return done(null, { id: 'idPrefix11111' })
     })
 
 }
