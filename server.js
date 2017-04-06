@@ -16,12 +16,17 @@ seneca.use('seneca-postgres-store', {
 seneca.add('role:user,cmd:find_user', (msg, reply) => {
     let id = msg.id
     var entity = seneca.make$('usertable')
-    entity.name = "danw"
-    entity.age = 100
     entity.load$({ id: id }, function (err, entity) {
         reply(null, entity)
     })
 
+})
+seneca.add('role:user,cmd:find_all_user', (msg, reply) => {
+    var entity = seneca.make$('usertable')
+    entity.list$({ name: 'danw' ,sort$:{limit:2}}, function (err, entity) {
+        console.log('err: ', err);
+        reply(null, entity)
+    })
 })
 seneca.add('role:user,cmd:edit_user', (msg, reply) => {
     var entity = seneca.make$('usertable')
@@ -35,10 +40,10 @@ seneca.add('role:user,cmd:delete_user', (msg, reply) => {
         reply(null, entity)
     })
 })
-seneca.add({ role: 'sql', hook: 'generate_id' }, function (args, done) {
-    return done(null, { id: 'idPrefix' })
-})
-seneca.add({ role: 'user', cmd: 'create_user' }, function (msg, reply) {
+// seneca.add({ role: 'sql', hook: 'generate_id' }, function (args, done) {
+//     return done(null, { id: 'idPrefix' })
+// })
+seneca.add({ role: 'user', cmd: 'create_user',hook:'generate_id' }, function (msg, reply) {
     var entity = seneca.make$('usertable')
     entity.name = "danw"
     entity.age = 100
@@ -53,9 +58,8 @@ createUser = function (reply) {
     // seneca.act('role:sql,hook:generate_id', { left: 1, right: 2 }, (err, result) => {
     //     
     // })
-    seneca.act('role:user,cmd:create_user', { left: 1, right: 2 }, function (err, result) {
+    seneca.act('role:user,cmd:create_user,hook:generate_id', function (err, result) {
         if (err) return
-
         reply('Hello, user!' + result.data)
     })
 
@@ -63,6 +67,12 @@ createUser = function (reply) {
 
 findUserById = (request,reply) => {
     seneca.act('role:user,cmd:find_user', { id: request.query.id }, (err, result) => {
+        if (err) return
+        reply(result)
+    })
+}
+findAllUserById = (request,reply) => {
+    seneca.act('role:user,cmd:find_all_user', (err, result) => {
         if (err) return
         reply(result)
     })
@@ -101,6 +111,13 @@ server.route([
     path: '/user/info',
     handler: function (request, reply) {
         findUserById(request,reply)
+    }
+},
+{
+    method: 'GET',
+    path: '/user/list',
+    handler: function (request, reply) {
+        findAllUserById(request,reply)
     }
 },
 {
