@@ -4,53 +4,53 @@ var seneca = require('seneca')()
 const server = new Hapi.Server();
 server.connection({ port: 3000, host: 'localhost' });
 
-//数据库连接
-seneca.use('entity')
-seneca.use('seneca-postgres-store', {
-    name: 'postgres',
-    host: 'localhost',
-    port: 5432
-})
-
+// //数据库连接
+// seneca.use('entity')
+// seneca.use('seneca-postgres-store', {
+//     name: 'postgres',
+//     host: 'localhost',
+//     port: 5432
+// })
+seneca.use( './micro-services/index.js')
 //CRUD微服务
-seneca.add('role:user,cmd:find_user', (msg, reply) => {
-    let id = msg.id
-    var entity = seneca.make$('usertable')
-    entity.load$({ id: id }, function (err, entity) {
-        reply(null, entity)
-    })
+// seneca.add('role:user,cmd:find_user', (msg, reply) => {
+//     let id = msg.id
+//     var entity = seneca.make$('usertable')
+//     entity.load$({ id: id }, function (err, entity) {
+//         reply(null, entity)
+//     })
 
-})
-seneca.add('role:user,cmd:find_all_user', (msg, reply) => {
-    var entity = seneca.make$('usertable')
-    entity.list$({ name: 'danw' ,limit$:2}, function (err, entity) {
-        reply(null, entity)
-    })
-})
-seneca.add('role:user,cmd:edit_user', (msg, reply) => {
-    var entity = seneca.make$('usertable')
-    entity.save$({ id: msg.id, name: msg.name }, function (err, entity) {
-        reply(null, entity)
-    })
-})
-seneca.add('role:user,cmd:delete_user', (msg, reply) => {
-    var entity = seneca.make$('usertable')
-    entity.remove$({ id: msg.id }, function (err, entity) {
-        reply(null, entity)
-    })
-})
+// })
+// seneca.add('role:user,cmd:find_all_user', (msg, reply) => {
+//     var entity = seneca.make$('usertable')
+//     entity.list$({ name: 'danw' ,limit$:2}, function (err, entity) {
+//         reply(null, entity)
+//     })
+// })
+// seneca.add('role:user,cmd:edit_user', (msg, reply) => {
+//     var entity = seneca.make$('usertable')
+//     entity.save$({ id: msg.id, name: msg.name }, function (err, entity) {
+//         reply(null, entity)
+//     })
+// })
+// seneca.add('role:user,cmd:delete_user', (msg, reply) => {
+//     var entity = seneca.make$('usertable')
+//     entity.remove$({ id: msg.id }, function (err, entity) {
+//         reply(null, entity)
+//     })
+// })
 // seneca.add({ role: 'sql', hook: 'generate_id' }, function (args, done) {
 //     return done(null, { id: 'idPrefix' })
 // })
-seneca.add({ role: 'user', cmd: 'create_user',hook:'generate_id' }, function (msg, reply) {
-    var entity = seneca.make$('usertable')
-    entity.name = "danw"
-    entity.age = 100
-    // entity.id='abc'
-    entity.save$(function (err, entity) {
-        reply(null, { data: entity })
-    })
-})
+// seneca.add({ role: 'user', cmd: 'create_user',hook:'generate_id' }, function (msg, reply) {
+//     var entity = seneca.make$('usertable')
+//     entity.name = "danw"
+//     entity.age = 100
+//     // entity.id='abc'
+//     entity.save$(function (err, entity) {
+//         reply(null, { data: entity })
+//     })
+// })
 
 //
 createUser = function (reply) {
