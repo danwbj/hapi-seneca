@@ -1,0 +1,41 @@
+{
+    "connections": [
+        {
+            "host": "0.0.0.0",
+            "port": 3005,
+            "labels": [
+                "api"
+            ],
+            "routes": {
+                "cors": true
+            }
+        }
+    ],
+    "registrations": [
+        {
+            "plugin": {
+                "register": "good",
+                "options": {
+                    "reporters": {
+                        "console": [
+                            {
+                                "module": "good-squeeze",
+                                "name": "Squeeze",
+                                "args": [
+                                    {
+                                        "response": "*",
+                                        "log": "*"
+                                    }
+                                ]
+                            },
+                            {
+                                "module": "good-console"
+                            },
+                            "stdout"
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}
