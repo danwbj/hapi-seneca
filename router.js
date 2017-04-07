@@ -1,3 +1,3 @@
-var users = require('./modules/users/index1.js')
+var users = require('./modules/users/index.js')
 
 module.exports = [].concat(users)

@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "chairo": "^3.0.0",
     "glue": "^4.1.0",
     "good": "^7.1.0",
     "good-console": "^6.4.0",

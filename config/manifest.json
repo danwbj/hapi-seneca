@@ -13,6 +13,9 @@
     ],
     "registrations": [
         {
+            "plugin": "chairo"
+        },
+        {
             "plugin": {
                 "register": "good",
                 "options": {

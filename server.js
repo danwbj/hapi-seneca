@@ -5,25 +5,24 @@ var routes = require('./router.js');
 
 const manifest = require('./config/manifest.json');
 
-console.log(__dirname)
 
-var seneca = require('seneca')()
-global.seneca = seneca
+// var seneca = require('seneca')()
+// global.seneca = seneca
 
 // const server = new Hapi.Server();
 // server.connection({ port: 3000, host: 'localhost' });
 
- //加载微服务
-seneca.use('./micro-services/index.js')
+
 
 
 
 Glue.compose(manifest, (err, server) => {
-    console.log('manifest: ', manifest);
     if (err) {
         console.log('server.register err:', err);
     }
-   
+    console.log(server.seneca)
+    //加载微服务
+    server.seneca.use('./micro-services/index.js')
     //初始化路由
     server.route(routes);
 
